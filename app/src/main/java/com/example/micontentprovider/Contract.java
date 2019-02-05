@@ -1,7 +1,7 @@
 package com.example.micontentprovider;
 
 import android.net.Uri;
-
+// branch
 public final class Contract {
 
     private Contract(){}
