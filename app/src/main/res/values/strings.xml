@@ -1,3 +1,13 @@
 <resources>
     <string name="app_name">MiContentProvider</string>
+
+
+    <string-array name="asignaturas">
+        <item>PM 2</item>
+        <item>TSO</item>
+        <item>TSAM</item>
+        <item>CN</item>
+        <item>PACS</item>
+        <item>TBD</item>
+    </string-array>
 </resources>
