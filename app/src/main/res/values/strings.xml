@@ -1,5 +1,8 @@
 <resources>
     <string name="app_name">MiContentProvider</string>
+    <string name="respuesta">Respuesta:</string>
+    <string name="mostrar_todas_asignaturas">Mostrar todas</string>
+    <string name="mostrar_primera_asignatura">Mostrar primera</string>
 
 
     <string-array name="asignaturas">
