@@ -20,6 +20,8 @@ public final class Contract {
     static final String ASIGNATURA_ID = "id";
 
     //https://developer.android.com/guide/topics/providers/content-provider-creating.html#MIMETypes
-    static final String SINGLE_RECORD_MIME_TYPE = "";
-    static final String MULTIPLE_RECORDS_MIME_TYPE = "";
+    static final String SINGLE_RECORD_MIME_TYPE =
+            "vnd.android.cursor.item/vnd.com.example.provider.asignaturas";
+    static final String MULTIPLE_RECORDS_MIME_TYPE =
+            "vnd.android.cursor.dir/vnd.com.example.provider.asignaturas";
 }
