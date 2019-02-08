@@ -29,7 +29,7 @@
         android:layout_marginTop="112dp"
         android:layout_marginEnd="24dp"
         android:layout_marginRight="24dp"
-        android:onClick="onClickBotonoes"
+        android:onClick="onClickBotones"
         android:text="@string/mostrar_todas"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -41,7 +41,7 @@
         android:layout_marginTop="48dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
-        android:onClick="onClickBotonoes"
+        android:onClick="onClickBotones"
         android:text="@string/mostrar_primera"
         app:layout_constraintEnd_toEndOf="@+id/btn_mostrar_todos"
         app:layout_constraintHorizontal_bias="1.0"
