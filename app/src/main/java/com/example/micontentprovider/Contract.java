@@ -1,6 +1,7 @@
 package com.example.micontentprovider;
 
 import android.net.Uri;
+import android.provider.BaseColumns;
 
 public final class Contract {
 
@@ -24,4 +25,15 @@ public final class Contract {
             "vnd.android.cursor.item/vnd.com.example.provider.asignaturas";
     static final String MULTIPLE_RECORDS_MIME_TYPE =
             "vnd.android.cursor.dir/vnd.com.example.provider.asignaturas";
+
+
+    public static final String DATABASE_NOMBRE = "asignaturas";
+
+    public static abstract class Asignaturas implements BaseColumns {
+
+        public static final String ASIGNATURA_TABLE_= "asignaturas_nombres";
+        public static final String ID = "_id";
+        public static final String NOMBRE = "nombre";
+
+    }
 }
