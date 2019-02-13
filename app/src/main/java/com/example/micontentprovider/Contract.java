@@ -20,6 +20,14 @@ public final class Contract {
     static final int ALL_ITEMS  = -2;
     static final String ASIGNATURA_ID = "id";
 
+
+    public static final String COUNT = "count";
+
+    // content://com.example.micontentprovider.provider/asignaturas/#
+    public static final Uri ROW_COUNT_URI =
+            Uri.parse("content://" + AUTHORITY+"/"+CONTENT_PATH+"/"+COUNT);
+
+
     //https://developer.android.com/guide/topics/providers/content-provider-creating.html#MIMETypes
     static final String SINGLE_RECORD_MIME_TYPE =
             "vnd.android.cursor.item/vnd.com.example.provider.asignaturas";

@@ -2,6 +2,7 @@ package com.example.micontentprovider;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
@@ -15,13 +16,16 @@ public class AsignaturasOpenHelper extends SQLiteOpenHelper {
 
     public static final int DATABASE_VERSION = 1;
 
+    SQLiteDatabase lecturaBd;
+    SQLiteDatabase escrituraBd;
+
     public static final String ASIGNATURAS_CREATE_TABLE =
             "CREATE TABLE " + Asignaturas.ASIGNATURAS_TABLA + "(" +
             Asignaturas.ID + " INTEGER PRIMARY KEY, " +
             Asignaturas.NOMBRE + " TEXT);";
 
     public AsignaturasOpenHelper(Context context) {
-        super(context, Contract.DATABASE_NOMBRE, null, DATABASE_VERSION);
+        super(context, DATABASE_NOMBRE, null, DATABASE_VERSION);
 
     }
     @Override
@@ -29,7 +33,6 @@ public class AsignaturasOpenHelper extends SQLiteOpenHelper {
         db.execSQL(ASIGNATURAS_CREATE_TABLE);
         llenarTabla(db);
     }
-
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         Log.d(TAG_LOG, "Actualizar Base de dastos de la version " +
@@ -38,7 +41,6 @@ public class AsignaturasOpenHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + Asignaturas.ASIGNATURAS_TABLA);
         onCreate(db);
     }
-
     public void llenarTabla(SQLiteDatabase db) {
         String[] datos = {"Programación Móvil II", "Taller de SO", "Programación Web",
                             "Tópicos selectos de AM"};
@@ -47,6 +49,62 @@ public class AsignaturasOpenHelper extends SQLiteOpenHelper {
             values.put(Asignaturas.NOMBRE, datos[i]);
             db.insert(Asignaturas.ASIGNATURAS_TABLA, null, values);
         }
+    }
+
+    public Cursor query(int posicion) {
+        String query;
+        if (posicion != ALL_ITEMS) {
+            posicion++;
+            query = "SELECT + "  + Asignaturas.ID + "," + Asignaturas.NOMBRE +
+                    " FROM " + Asignaturas.ASIGNATURAS_TABLA +
+                    " WHERE "  + Asignaturas.ID + " = " + posicion;
+        } else {
+            query = "SELECT + "  + Asignaturas.ID + "," + Asignaturas.NOMBRE +
+                    " FROM " + Asignaturas.ASIGNATURAS_TABLA +
+                    " ORDER BY "  + Asignaturas.NOMBRE + " ASC";
+        }
+        Cursor cursor = null;
+        try{
+            if (lecturaBd == null) {
+                lecturaBd = getReadableDatabase();
+            }
+            cursor = lecturaBd.rawQuery(query,null);
+        } catch (Exception e) {
+            Log.d(TAG_LOG, "Error al realiza la consulta: " + e);
+        } finally {
+            return  cursor;
+        }
+
+    }
+
+    public long insert(ContentValues contentValues) {
+        long resultado = 0;
+
+        try{
+            if (escrituraBd == null) {
+                escrituraBd = getWritableDatabase();
+            }
+            resultado = escrituraBd.insert(
+                    Asignaturas.ASIGNATURAS_TABLA,
+                    null,
+                    contentValues
+            );
+        } catch (Exception e) {
+            Log.d(TAG_LOG, "Error al insertar datos: " + e);
+        }
+        return resultado;
+    }
+
+    public int update(int id, String asingatura){
+        return 0;
+    }
+
+    public int delete(int id) {
+        return 0;
+    }
+
+    public Cursor count() {
+        return null;
     }
 
 
