@@ -3,6 +3,8 @@ package com.example.micontentprovider;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.DatabaseUtils;
+import android.database.MatrixCursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
@@ -96,15 +98,59 @@ public class AsignaturasOpenHelper extends SQLiteOpenHelper {
     }
 
     public int update(int id, String asingatura){
-        return 0;
+        int resultado = 0;
+        try {
+            ContentValues values = new ContentValues();
+            values.put(Asignaturas.NOMBRE, asingatura);
+            if (escrituraBd == null) {
+                escrituraBd = getWritableDatabase();
+            }
+
+            resultado = escrituraBd.update(
+                    Asignaturas.ASIGNATURAS_TABLA,
+                    values,
+                    Asignaturas.ID + " = ?",
+                    new String[]{String.valueOf(id)}
+            );
+        } catch (Exception e) {
+            Log.d(TAG_LOG, "Error al actualizar: "  + e);
+        }
+        return resultado;
     }
 
     public int delete(int id) {
-        return 0;
+        int resultado = 0;
+        try{
+            if (escrituraBd == null) {
+                escrituraBd = getWritableDatabase();
+            }
+            escrituraBd.delete(
+                    Asignaturas.ASIGNATURAS_TABLA,
+                    Asignaturas.ID + " = ?",
+                    new String[]{String.valueOf(id)}
+            );
+        }catch (Exception e) {
+            Log.d(TAG_LOG, "Error al eliminar: " + e);
+        }
+        return resultado;
     }
 
     public Cursor count() {
-        return null;
+        MatrixCursor cursor = new MatrixCursor(
+                new String[]{CONTENT_PATH});
+        try {
+            if (lecturaBd == null) {
+                lecturaBd = getReadableDatabase();
+            }
+
+            int count = (int)
+                    DatabaseUtils.queryNumEntries(
+                            lecturaBd,Asignaturas.ASIGNATURAS_TABLA);
+            cursor.addRow(new Object[]{count});
+        } catch (Exception e) {
+            Log.d(TAG_LOG, "Error Count: " + e);
+        }
+        return cursor;
     }
 
 
