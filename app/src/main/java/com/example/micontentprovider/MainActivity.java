@@ -4,6 +4,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
@@ -14,18 +15,28 @@ public class MainActivity extends AppCompatActivity {
 
     public static final String TAG_MAIN = MainActivity.class.getSimpleName();
 
-    private RecyclerView recyclerView;
+    public static final int NOMBRE_EDIT = 99;
 
-    TextView textView;
+    private RecyclerView recyclerView;
+    private AsignaturaAdapter adapter;
+
+    //TextView textView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        textView = (TextView) findViewById(R.id.textView);
+        //textView = (TextView) findViewById(R.id.textView);
+
+        recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
+        adapter = new AsignaturaAdapter(this);
+
+        recyclerView.setAdapter(adapter);
+
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
 
-    public void onClickBotones(View view) {
+    /*public void onClickBotones(View view) {
 
         String queryUri = Contract.CONTENT_URI.toString();
 
@@ -75,7 +86,7 @@ public class MainActivity extends AppCompatActivity {
         } else {
             textView.append("No existen Asignaturas.");
         }
-    }
+    }*/
 }
 
 

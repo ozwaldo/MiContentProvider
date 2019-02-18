@@ -1,6 +1,8 @@
 package com.example.micontentprovider;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.support.annotation.NonNull;
@@ -67,7 +69,7 @@ public class AsignaturaAdapter extends
         final AsignaturaViewHolder holder = asignaturaViewHolder;
 
         String nombre = "";
-        int id = -1;
+        final int id = -1;
 
         Cursor cursor = context.getContentResolver().query(
                 Uri.parse(queryUri),
@@ -78,12 +80,13 @@ public class AsignaturaAdapter extends
         );
 
         if (cursor != null){
-            if (cursor.moveToFirst()) {
+            if (cursor.moveToPosition(i)) {
+
                 int indexAsignatura =
                         cursor.getColumnIndex(Contract.Asignaturas.NOMBRE);
                 nombre = cursor.getString(indexAsignatura);
+                Log.d(TAG_LOG, "ASIGNATURA: " + nombre);
                 holder.asignaturaItemView.setText(nombre);
-
             } else {
                 holder.asignaturaItemView.setText(R.string.error_asignatura);
             }
@@ -91,10 +94,60 @@ public class AsignaturaAdapter extends
         } else {
             Log.d(TAG_LOG, "Error al cargar los datos: onBindViewHolder()");
         }
+
+        final String finalNombre = nombre;
+        asignaturaViewHolder.btn_edit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, EditNombreAcitivity.class);
+
+                intent.putExtra(EXTRA_ID, id);
+                intent.putExtra(EXTRA_POSICION, holder.getAdapterPosition());
+                intent.putExtra(EXTRA_NOMBRE, finalNombre);
+
+                ((Activity) context).startActivityForResult(
+                        intent, MainActivity.NOMBRE_EDIT);
+            }
+        });
+
+        asignaturaViewHolder.btn_delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                selectArgs = new String[]{String.valueOf(id)};
+
+                int eliminado = context.getContentResolver().
+                        delete(
+                                Contract.CONTENT_URI,
+                                Contract.CONTENT_PATH,
+                                selectArgs
+                        );
+                if (eliminado > 0) {
+                    notifyItemRemoved(holder.getAdapterPosition());
+                    notifyItemRangeRemoved(holder.getAdapterPosition(),getItemCount());
+                }
+            }
+        });
     }
 
     @Override
     public int getItemCount() {
-        return 0;
+        Cursor cursor = context.getContentResolver().
+                query(
+                        Contract.CONTENT_URI,
+                        new String[]{"COUNT(*) AS count"},
+                        selectClause,
+                        selectArgs,
+                        sortOrder
+                );
+        try{
+            cursor.moveToFirst();
+            int count = cursor.getInt(0);
+            Log.d(TAG_LOG, "COUNT getItemCount() " + count);
+            cursor.close();
+            return count;
+        }catch (Exception e) {
+            Log.d(TAG_LOG, "Error al realizar COUNT: " + e);
+            return -1;
+        }
     }
 }
