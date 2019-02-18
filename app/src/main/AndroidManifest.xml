@@ -9,9 +9,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".EditNombreActivity"></activity>
+
         <provider
-            android:authorities="com.example.micontentprovider.provider"
-            android:name=".AsignaturasContentProvider"/>
+            android:name=".AsignaturasContentProvider"
+            android:authorities="com.example.micontentprovider.provider" />
+
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

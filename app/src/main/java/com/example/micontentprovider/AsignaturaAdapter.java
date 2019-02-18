@@ -1,6 +1,8 @@
 package com.example.micontentprovider;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.support.annotation.NonNull;
@@ -61,6 +63,7 @@ public class AsignaturaAdapter extends RecyclerView.Adapter<AsignaturaAdapter.As
 
     @Override
     public void onBindViewHolder(@NonNull AsinaturaViewHolder asinaturaViewHolder, int i) {
+
         final AsinaturaViewHolder holder = asinaturaViewHolder;
 
         String nombre = "";
@@ -76,7 +79,7 @@ public class AsignaturaAdapter extends RecyclerView.Adapter<AsignaturaAdapter.As
                 );
 
         if (cursor != null) {
-            if (cursor.moveToFirst()) {
+            if (cursor.moveToPosition(i)) {
                 int indexAsignatura =
                         cursor.getColumnIndex(Contract.Asignaturas.NOMBRE);
                 nombre = cursor.getString(indexAsignatura);
@@ -90,11 +93,68 @@ public class AsignaturaAdapter extends RecyclerView.Adapter<AsignaturaAdapter.As
         } else {
             Log.d(TAG_LOG, "Error onBindViewHolder");
         }
+
+        final int finalId = id;
+        final String finalNombre = nombre;
+        asinaturaViewHolder.btn_edit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, EditNombreActivity.class);
+
+                intent.putExtra(EXTRA_ID, finalId);
+                intent.putExtra(EXTRA_POSICION, holder.getAdapterPosition());
+                intent.putExtra(EXTRA_NOMBRE, finalNombre);
+
+                ((Activity) context).startActivityForResult(intent, MainActivity.NOMBRE_EDIT);
+            }
+        });
+
+
+        asinaturaViewHolder.btn_delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                selectionArgs = new String[]{String.valueOf(finalId)};
+                int eliminado = context.getContentResolver().
+                        delete(
+                                Contract.CONTENT_URI,
+                                Contract.CONTENT_PATH,
+                                selectionArgs);
+
+                if (eliminado > 0) {
+                    // Log.
+                    Log.d(TAG_LOG, "POSICION DE INICIO: " + holder.getAdapterPosition());
+                    int pos = holder.getAdapterPosition();
+                    notifyItemRemoved(pos);
+                    notifyItemRangeRemoved(pos,getItemCount());
+                } else {
+                    Log.d(TAG_LOG, "Error al eliminar registro: " +
+                            eliminado);
+                }
+
+            }
+        });
     }
 
 
     @Override
     public int getItemCount() {
-        return 0;
+        Cursor cursor = context.getContentResolver().query(
+                Contract.ROW_COUNT_URI,
+                new String[]{"count(*) AS count"},
+                selectionClause,
+                selectionArgs,
+                sortOrder
+        );
+
+        try {
+            cursor.moveToFirst();
+            int count = cursor.getInt(0);
+            Log.d(TAG_LOG, "COUNT getItemCount() " + count);
+            cursor.close();
+            return count;
+        } catch (Exception e) {
+            Log.d(TAG_LOG, "Error al realizar la consulta COUNT: " + e);
+            return -1;
+        }
     }
 }

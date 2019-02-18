@@ -47,7 +47,7 @@ public class AsignaturasContentProvider extends ContentProvider {
     private void initUriMatcher(){
         uriMatcher.addURI(
                 Contract.AUTHORITY,Contract.CONTENT_PATH + "/#",
-                URI_ALL_ITEMS_CODE);
+                URI_ONE_ITEM_CODE);
         uriMatcher.addURI(
                 Contract.AUTHORITY,Contract.CONTENT_PATH + "/" + Contract.COUNT,
                 URI_COUNT_CODE);
@@ -87,6 +87,7 @@ public class AsignaturasContentProvider extends ContentProvider {
             case URI_COUNT_CODE:
                 cursor = db.count();
                 Log.d(LOG_TAG, "Obtener el numero: " + cursor);
+                break;
             case UriMatcher.NO_MATCH:
                 Log.d(LOG_TAG, "URI no reconocida: " + uri);
                 //id = -1;
@@ -129,6 +130,7 @@ public class AsignaturasContentProvider extends ContentProvider {
 
     @Override
     public int delete(Uri uri, String selection, String[] selectionArgs) {
+        Log.d(LOG_TAG, "ELIMINAR: " + selectionArgs[0]);
         return db.delete(Integer.parseInt(selectionArgs[0]));
     }
 

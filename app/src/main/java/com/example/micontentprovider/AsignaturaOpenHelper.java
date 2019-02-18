@@ -26,8 +26,8 @@ public class AsignaturaOpenHelper extends SQLiteOpenHelper {
 
     public static final String ASIGNATURAS_TABLE_CREATE =
             "CREATE TABLE " + Asignaturas.ASIGNATURA_TABLE_ + "("
-            + Asignaturas.ID + "INTEGER PRIMARY KEY, " +
-            Asignaturas.NOMBRE + "TEXT);";
+            + Asignaturas.ID + " INTEGER PRIMARY KEY, " +
+            Asignaturas.NOMBRE + " TEXT);";
 
     public AsignaturaOpenHelper(Context context) {
         super(context, DATABASE_NOMBRE, null, DATABASE_VERSION);
@@ -38,7 +38,18 @@ public class AsignaturaOpenHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(ASIGNATURAS_TABLE_CREATE);
+        llenarTabla(db);
 
+    }
+
+    public void llenarTabla(SQLiteDatabase db) {
+        String[] datos = {"Programación Móvil II", "Taller de SO", "Programación Web",
+                "Tópicos selectos de AM"};
+        ContentValues values = new ContentValues();
+        for (int i = 0; i < datos.length; i++) {
+            values.put(Asignaturas.NOMBRE, datos[i]);
+            db.insert(Asignaturas.ASIGNATURA_TABLE_, null, values);
+        }
     }
 
     @Override
@@ -77,6 +88,7 @@ public class AsignaturaOpenHelper extends SQLiteOpenHelper {
     }
 
     public Cursor count() {
+        Log.d(TAG_LOG, "entra al count");
         MatrixCursor cursor = new MatrixCursor(new String[]{CONTENT_PATH});
         try {
             if (lecturaDB == null){

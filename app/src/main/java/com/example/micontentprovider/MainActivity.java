@@ -1,34 +1,84 @@
 package com.example.micontentprovider;
 
+import android.content.ContentValues;
+import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.widget.Adapter;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
     public static final String TAG_MAIN = MainActivity.class.getSimpleName();
 
-    public static final int ASIGNATURA_EDIT = -1;
+    public static final int NOMBRE_EDIT = 1;
+    public static final int NOMBRE_ADD = -1;
 
     private RecyclerView recyclerView;
+    private AsignaturaAdapter adapter;
 
-
-    TextView textView;
+    // TextView textView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        textView = (TextView) findViewById(R.id.textView);
+
+        recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
+
+        adapter = new AsignaturaAdapter(this);
+
+        recyclerView.setAdapter(adapter);
+
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        // textView = (TextView) findViewById(R.id.textView);
     }
 
-    public void onClickBotones(View view) {
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == NOMBRE_EDIT) {
+            if (resultCode == RESULT_OK) {
+                String nombre = data.getStringExtra(EditNombreActivity.EXTRA_REPLY);
+                if (nombre.length() != 0) {
+                    ContentValues values = new ContentValues();
+                    values.put(Contract.Asignaturas.NOMBRE, nombre);
+                    int id = data.getIntExtra(AsignaturaAdapter.EXTRA_ID, -99);
+
+                    if (id == NOMBRE_ADD) {
+                        getContentResolver().insert(
+                                Contract.CONTENT_URI,
+                                values
+                        );
+                    } else if (id > 0) {
+                        String[] selectionArgs = {String.valueOf(id)};
+                        getContentResolver().update(
+                                Contract.CONTENT_URI,
+                                values,
+                                Contract.Asignaturas.ID,
+                                selectionArgs
+                        );
+                    }
+                    adapter.notifyDataSetChanged();
+                } else {
+                    Toast.makeText(getApplicationContext(),
+                            "No se inserto la asignatura", Toast.LENGTH_SHORT).show();
+                }
+            }
+        }
+    }
+
+    /*public void onClickBotones(View view) {
 
         String queryUri = Contract.CONTENT_URI.toString();
 
@@ -80,7 +130,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
 
-    }
+    }*/
 }
 
 
