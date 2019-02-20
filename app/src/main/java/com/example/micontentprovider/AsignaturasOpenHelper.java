@@ -57,11 +57,11 @@ public class AsignaturasOpenHelper extends SQLiteOpenHelper {
         String query;
         if (posicion != ALL_ITEMS) {
             posicion++;
-            query = "SELECT + "  + Asignaturas.ID + "," + Asignaturas.NOMBRE +
+            query = "SELECT "  + Asignaturas.ID + "," + Asignaturas.NOMBRE +
                     " FROM " + Asignaturas.ASIGNATURAS_TABLA +
                     " WHERE "  + Asignaturas.ID + " = " + posicion;
         } else {
-            query = "SELECT + "  + Asignaturas.ID + "," + Asignaturas.NOMBRE +
+            query = "SELECT "  + Asignaturas.ID + "," + Asignaturas.NOMBRE +
                     " FROM " + Asignaturas.ASIGNATURAS_TABLA +
                     " ORDER BY "  + Asignaturas.NOMBRE + " ASC";
         }
@@ -124,7 +124,7 @@ public class AsignaturasOpenHelper extends SQLiteOpenHelper {
             if (escrituraBd == null) {
                 escrituraBd = getWritableDatabase();
             }
-            escrituraBd.delete(
+            resultado = escrituraBd.delete(
                     Asignaturas.ASIGNATURAS_TABLA,
                     Asignaturas.ID + " = ?",
                     new String[]{String.valueOf(id)}
@@ -142,7 +142,6 @@ public class AsignaturasOpenHelper extends SQLiteOpenHelper {
             if (lecturaBd == null) {
                 lecturaBd = getReadableDatabase();
             }
-
             int count = (int)
                     DatabaseUtils.queryNumEntries(
                             lecturaBd,Asignaturas.ASIGNATURAS_TABLA);
@@ -152,6 +151,4 @@ public class AsignaturasOpenHelper extends SQLiteOpenHelper {
         }
         return cursor;
     }
-
-
 }

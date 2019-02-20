@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.database.DatabaseUtils;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -40,6 +41,7 @@ public class AsignaturaAdapter extends
         public final TextView asignaturaItemView;
         Button btn_delete;
         Button btn_edit;
+
         public AsignaturaViewHolder(View itemView) {
             super(itemView);
             asignaturaItemView =
@@ -66,10 +68,11 @@ public class AsignaturaAdapter extends
 
     @Override
     public void onBindViewHolder(AsignaturaAdapter.AsignaturaViewHolder asignaturaViewHolder, int i) {
+
         final AsignaturaViewHolder holder = asignaturaViewHolder;
 
         String nombre = "";
-        final int id = -1;
+        int id = -1;
 
         Cursor cursor = context.getContentResolver().query(
                 Uri.parse(queryUri),
@@ -81,12 +84,21 @@ public class AsignaturaAdapter extends
 
         if (cursor != null){
             if (cursor.moveToPosition(i)) {
-
+                Log.d(TAG_LOG, "Posicion: " + i);
                 int indexAsignatura =
                         cursor.getColumnIndex(Contract.Asignaturas.NOMBRE);
+
                 nombre = cursor.getString(indexAsignatura);
+
                 Log.d(TAG_LOG, "ASIGNATURA: " + nombre);
+
                 holder.asignaturaItemView.setText(nombre);
+
+                Log.d(TAG_LOG, "Base de datos: " + DatabaseUtils.dumpCursorToString(cursor));
+
+                int indexId = cursor.getColumnIndex(Contract.Asignaturas.ID);
+                id = cursor.getInt(indexId);
+
             } else {
                 holder.asignaturaItemView.setText(R.string.error_asignatura);
             }
@@ -96,12 +108,13 @@ public class AsignaturaAdapter extends
         }
 
         final String finalNombre = nombre;
+        final int finalId = id;
         asignaturaViewHolder.btn_edit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, EditNombreAcitivity.class);
 
-                intent.putExtra(EXTRA_ID, id);
+                intent.putExtra(EXTRA_ID, finalId);
                 intent.putExtra(EXTRA_POSICION, holder.getAdapterPosition());
                 intent.putExtra(EXTRA_NOMBRE, finalNombre);
 
@@ -113,7 +126,7 @@ public class AsignaturaAdapter extends
         asignaturaViewHolder.btn_delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                selectArgs = new String[]{String.valueOf(id)};
+                selectArgs = new String[]{String.valueOf(finalId)};
 
                 int eliminado = context.getContentResolver().
                         delete(
@@ -121,9 +134,10 @@ public class AsignaturaAdapter extends
                                 Contract.CONTENT_PATH,
                                 selectArgs
                         );
+                Log.d(TAG_LOG, "btn_delete: " + eliminado);
                 if (eliminado > 0) {
                     notifyItemRemoved(holder.getAdapterPosition());
-                    notifyItemRangeRemoved(holder.getAdapterPosition(),getItemCount());
+                    //notifyItemRangeRemoved(holder.getAdapterPosition(),getItemCount());
                 }
             }
         });
@@ -133,7 +147,7 @@ public class AsignaturaAdapter extends
     public int getItemCount() {
         Cursor cursor = context.getContentResolver().
                 query(
-                        Contract.CONTENT_URI,
+                        Contract.ROW_COUNT_URI,
                         new String[]{"COUNT(*) AS count"},
                         selectClause,
                         selectArgs,

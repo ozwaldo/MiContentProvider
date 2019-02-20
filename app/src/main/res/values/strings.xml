@@ -6,6 +6,8 @@
     <string name="boton_delete">Eliminar</string>
     <string name="boton_edit">Editar</string>
     <string name="error_asignatura">No existen asignaturas</string>
+    <string name="edit_nombre">Nombre de la Asignatura</string>
+    <string name="btn_actualizar">Actualizar</string>
 
 
     <string-array name="asignaturas">
