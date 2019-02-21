@@ -12,13 +12,14 @@ public class EditNombreAcitivity extends AppCompatActivity {
 
     public static final String EXTRA_RESTPUESTA = "com.example.micontentprovider.RESPUESTA";
 
+    int id = 0;
+
     EditText etEditNombre;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_nombre_acitivity);
-
         etEditNombre = (EditText) findViewById(R.id.tv_edit_nombre);
 
         Intent intent = getIntent();
@@ -26,9 +27,17 @@ public class EditNombreAcitivity extends AppCompatActivity {
         etEditNombre.setText(
                 intent.getStringExtra(AsignaturaAdapter.EXTRA_NOMBRE));
 
+        id = intent.getIntExtra(AsignaturaAdapter.EXTRA_ID, 0);
     }
 
     public void onClickActualizar(View view) {
+        String nombre = etEditNombre.getText().toString();
 
+        Intent intent = new Intent();
+        intent.putExtra(EXTRA_RESTPUESTA, nombre);
+        intent.putExtra(AsignaturaAdapter.EXTRA_ID, id);
+
+        setResult(RESULT_OK, intent);
+        finish();
     }
 }
