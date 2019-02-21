@@ -5,7 +5,9 @@
     <string name="texto_asignaturas">Asignaturas:</string>
     <string name="boton_delete">Eliminar</string>
     <string name="boton_edit">Editar</string>
+    <string name="boton_guardar">Actualizar</string>
     <string name="error_asignatura">No se encontro asignatura</string>
+    <string name="hint_nombre">Asignatura</string>
 
 
     <string-array name="asignaturas">
