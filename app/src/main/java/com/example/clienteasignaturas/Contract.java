@@ -1,4 +1,4 @@
-package com.example.micontentprovider;
+package com.example.clienteasignaturas;
 
 import android.net.Uri;
 import android.provider.BaseColumns;

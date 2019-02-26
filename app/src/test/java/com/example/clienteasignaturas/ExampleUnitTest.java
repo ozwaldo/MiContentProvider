@@ -1,4 +1,4 @@
-package com.example.micontentprovider;
+package com.example.clienteasignaturas;
 
 import org.junit.Test;
 

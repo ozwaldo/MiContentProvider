@@ -1,4 +1,4 @@
-package com.example.micontentprovider;
+package com.example.clienteasignaturas;
 
 public class Asignatura {
     private int id;

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">MiContentProvider</string>
+    <string name="app_name">Cliente Asignaturas</string>
     <string name="mostrar_todas">Mostrar todas</string>
     <string name="mostrar_primera">Mostrar primera</string>
     <string name="texto_asignaturas">Asignaturas:</string>

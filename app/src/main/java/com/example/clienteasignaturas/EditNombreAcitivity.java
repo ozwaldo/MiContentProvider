@@ -1,4 +1,4 @@
-package com.example.micontentprovider;
+package com.example.clienteasignaturas;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
