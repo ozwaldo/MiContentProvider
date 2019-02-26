@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.micontentprovider">
-
+    <permission android:name="com.example.micontentprovider.PERMISSION" />
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -13,7 +13,9 @@
 
         <provider
             android:name=".AsignaturasContentProvider"
-            android:authorities="com.example.micontentprovider.provider" />
+            android:authorities="com.example.micontentprovider.provider"
+            android:exported="true"
+            />
 
         <activity android:name=".MainActivity">
             <intent-filter>
